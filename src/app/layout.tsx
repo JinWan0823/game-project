@@ -1,14 +1,10 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Sigmar } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const sigmar = Sigmar({
+  weight: '400',
+  variable: '--font-sigmar',
   subsets: ['latin'],
 });
 
@@ -25,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${sigmar.variable} antialiased`}
+        style={{
+          fontFamily: 'var(--font-sigmar), Arial, Helvetica, sans-serif',
+        }}
       >
         {children}
       </body>
