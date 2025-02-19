@@ -1,10 +1,16 @@
 import type { Metadata } from 'next';
-import { Sigmar } from 'next/font/google';
+import { Noto_Sans_KR, Sigmar } from 'next/font/google';
 import './globals.css';
 
 const sigmar = Sigmar({
   weight: '400',
   variable: '--font-sigmar',
+  subsets: ['latin'],
+});
+
+const notoSansKor = Noto_Sans_KR({
+  weight: '400',
+  variable: '--font-noto-sans',
   subsets: ['latin'],
 });
 
@@ -19,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
-        className={`${sigmar.variable} antialiased`}
+        className={`${notoSansKor.variable} ${sigmar.variable} antialiased overflow-hidden`}
         style={{
           fontFamily: 'var(--font-sigmar), Arial, Helvetica, sans-serif',
         }}
