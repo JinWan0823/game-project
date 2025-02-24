@@ -1,6 +1,16 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 export default function Home() {
+  const router = useRouter();
+  const handleMovePage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push('/gamelist');
+  };
+
   return (
     <div className="inner w-[1440px] h-[100vh] mx-auto flex items-center justify-center">
       <div className="text-center z-[999]">
@@ -11,7 +21,7 @@ export default function Home() {
           계속 추가할 예정이니 마음껏 즐겨주세요!
         </p>
 
-        <button type="button" className="btn-13">
+        <button type="button" className="btn-13" onClick={handleMovePage}>
           Let&apos;s Go
         </button>
       </div>
