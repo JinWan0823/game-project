@@ -12,8 +12,8 @@ export default function Home() {
   };
 
   return (
-    <div className="inner w-[1440px] h-[100vh] mx-auto flex items-center justify-center">
-      <div className="text-center z-[999]">
+    <main className="inner w-[1440px] h-[100vh] mx-auto flex items-center justify-center">
+      <section className="text-center z-[999]">
         <h1 className="text-4xl">Mini Game Night</h1>
         <h2 className="text-8xl point">GAME START</h2>
         <p className="text-xl">
@@ -24,7 +24,7 @@ export default function Home() {
         <button type="button" className="btn-13" onClick={handleMovePage}>
           Let&apos;s Go
         </button>
-      </div>
+      </section>
       <Image
         className="dark:invert absolute right-[10px] z-[0]]"
         src="/bg-big.png"
@@ -58,6 +58,6 @@ export default function Home() {
         priority
       />
       <div />
-    </div>
+    </main>
   );
 }
