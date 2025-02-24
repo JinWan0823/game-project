@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${notoSansKor.variable} ${sigmar.variable} antialiased overflow-hidden`}
+        className={`${notoSansKor.variable} ${sigmar.variable} antialiased`}
         style={{
           fontFamily: 'var(--font-sigmar), Arial, Helvetica, sans-serif',
         }}
