@@ -12,6 +12,7 @@
   "plugins": ["prettier"],
   "rules": {
     "import/extensions": "off", // 확장자 없이도 import 가능
+    "react/no-array-index-key": "off", // 데이터가 정적일 경우 index 사용
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "react/react-in-jsx-scope": "off",
