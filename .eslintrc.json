@@ -11,6 +11,7 @@
   },
   "plugins": ["prettier"],
   "rules": {
+    "import/extensions": "off", // 확장자 없이도 import 가능
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "react/react-in-jsx-scope": "off",

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 interface GameProps {
@@ -32,25 +33,27 @@ export default function ListCard({ game }: GameProps) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative">
-        <Image
-          className="absolute top-1/2 left-1/2 w-[600px] h-[300px] object-cover"
-          style={{
-            transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 0.5}deg) rotateY(${rotation.y * 0.5}deg) translate3d(-50%, -50%, 0)`,
-            transition: 'transform 0.1s ease-out',
-          }}
-          src="/img111.jpg"
-          alt="card-img"
-          width={600}
-          height={300}
-          priority
-        />
-      </figure>
-      <div className="p-[4px]">
-        <h2 className="text-xl point mb-[4px]">{game}</h2>
-        <p className="text-[#333]">Best Score : 10,000</p>
-        <p className="text-[#333]">My Score : 600 </p>
-      </div>
+      <Link href="/applegame">
+        <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative">
+          <Image
+            className="absolute top-1/2 left-1/2 w-[600px] h-[300px] object-cover"
+            style={{
+              transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 0.5}deg) rotateY(${rotation.y * 0.5}deg) translate3d(-50%, -50%, 0)`,
+              transition: 'transform 0.1s ease-out',
+            }}
+            src="/img111.jpg"
+            alt="card-img"
+            width={600}
+            height={300}
+            priority
+          />
+        </figure>
+        <div className="p-[4px]">
+          <h2 className="text-xl point mb-[4px]">{game}</h2>
+          <p className="text-[#333]">Best Score : 10,000</p>
+          <p className="text-[#333]">My Score : 600 </p>
+        </div>
+      </Link>
     </li>
   );
 }

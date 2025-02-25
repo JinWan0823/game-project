@@ -1,13 +1,12 @@
-import ListCard from '@/components/ListCard';
+import CommonBg from '@/_components/CommonBg';
+import ListCard from '@/_components/ListCard';
+import TitleWrap from '@/_components/TitleWrap';
 
 export default function GameList() {
   return (
-    <main className="inner w-[1240px] py-[120px] mx-auto">
-      <section>
-        <div className="text-center">
-          <h1 className="text-4xl">Mini Game Night</h1>
-          <h2 className="text-8xl point">GAME LIST</h2>
-        </div>
+    <main className="inner w-[1240px] py-[120px] mx-auto z-[99999] flex items-center justify-center">
+      <section className="w-full z-[9999]">
+        <TitleWrap title="GAME LIST" />
 
         <ul className="grid grid-cols-3 gap-6 mt-[36px]">
           <ListCard game="Apple Game" />
@@ -17,6 +16,7 @@ export default function GameList() {
           <ListCard game="Apple Game" />
         </ul>
       </section>
+      <CommonBg />
     </main>
   );
 }
