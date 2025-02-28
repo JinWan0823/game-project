@@ -4,7 +4,7 @@ export default function CommonBg() {
   return (
     <>
       <Image
-        className="dark:invert fixed right-[10px] z-[0]]"
+        className="dark:invert fixed right-[10px]"
         src="/bg-big.png"
         alt="Next.js logo"
         width={460}

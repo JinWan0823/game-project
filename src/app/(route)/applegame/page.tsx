@@ -1,76 +1,70 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+// import AppleGameBoard from '@/_components/AppleGameBoard';
+import Image from 'next/image';
+import { useState } from 'react';
 
+import CommonBg from '@/_components/CommonBg';
 import TitleWrap from '@/_components/TitleWrap';
 
 export default function AppleGame() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [bgmOn, setBgmOn] = useState(true);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const cols = 17; // 가로 17개
-    const rows = 10; // 세로 10개
-    const boxWidth = 36;
-    const boxHeight = 44;
-    const padding = 6;
-
-    // 1~9의 숫자가 170개 반복되는 배열을 랜덤하게 섞기
-    const numbers = Array.from({ length: 170 }, (_, i) => (i % 9) + 1);
-    for (let i = numbers.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-    }
-
-    // 전체 그리드 크기 계산
-    const gridWidth = cols * (boxWidth + padding);
-    const gridHeight = rows * (boxHeight + padding);
-
-    // Canvas 크기 조정
-    canvas.width = gridWidth + 220;
-    canvas.height = gridHeight + 80;
-
-    // 그리드의 시작 위치 중앙 정렬
-    const startX = (canvas.width - gridWidth) / 2;
-    const startY = (canvas.height - gridHeight) / 2;
-
-    // 배경 이미지 로드
-    const img = new Image();
-    img.src = '/apple2.png';
-    img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      numbers.forEach((num, idx) => {
-        const x = startX + (idx % cols) * (boxWidth + padding);
-        const y = startY + Math.floor(idx / cols) * (boxHeight + padding);
-
-        // 이미지 배경 그리기
-        ctx.drawImage(img, x, y, boxWidth, boxHeight);
-
-        // 숫자 텍스트 그리기
-        ctx.fillStyle = '#333eee';
-        ctx.font = '20px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(num.toString(), x + boxWidth / 2, y + boxHeight / 2);
-      });
-    };
-  }, []);
+  const toggleBgm = () => {
+    setBgmOn((prev) => !prev);
+  };
 
   return (
     <main className="inner w-[1240px] py-[120px] mx-auto flex items-center justify-center">
-      <section>
+      <section className="z-[9999]">
         <TitleWrap title="APPLE GAME" />
-        <div className="apple-wrap">
-          <div className="game-board bg-[#fff] rounded-lg p-[12px]">
-            <canvas ref={canvasRef} className="border border-gray-300" />
+        <div className="apple-wrap mt-[20px] w-[960px] h-[606px] bg-[#dfdfdf] rounded-lg border-8 border-indigo-400">
+          <div className="apple-cover flex justify-center items-center w-full h-full relative">
+            <div className="img-box text-center">
+              {/* <div className=" w-[200px] h-[200px] bg-[#333]" /> */}
+              <Image
+                src="/apple.png"
+                alt="apple img"
+                width={200}
+                height={200}
+                priority
+              />
+              <button type="button" className="btn-13 mt-[20px]">
+                START !
+              </button>
+            </div>
+
+            <div className="option-box absolute bottom-[8px] w-full p-4 flex items-center">
+              <div className="sound-toggle flex items-center">
+                <label
+                  aria-label="BGM TOGGLE"
+                  htmlFor="bgm"
+                  className="cursor-pointer mr-[4px]"
+                >
+                  <input
+                    type="checkbox"
+                    id="bgm"
+                    onChange={toggleBgm}
+                    checked
+                    className="hidden"
+                  />
+                  <div className="w-10 h-5 bg-gray-500 rounded-full relative transition overflow-hidden">
+                    <div
+                      className={`w-5 h-5 bg-white rounded-full absolute top-1/2 transform -translate-y-1/2 transition ${bgmOn ? 'translate-x-0' : 'translate-x-5'}`}
+                    />
+                  </div>
+                </label>
+                <p>BGM {bgmOn ? 'ON' : 'OFF'}</p>
+              </div>
+              <div className="sound-bar w-[120px] h-[8px] bg-[#335782]">
+                <div className="sound-vol w-[8px] h-[8px] bg-[#fff] rounded-xl" />
+              </div>
+            </div>
           </div>
+          {/* <AppleGameBoard /> */}
         </div>
       </section>
+      <CommonBg />
     </main>
   );
 }

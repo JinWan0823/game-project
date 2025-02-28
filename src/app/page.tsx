@@ -22,7 +22,11 @@ export default function Home() {
           계속 추가할 예정이니 마음껏 즐겨주세요!
         </p>
 
-        <button type="button" className="btn-13" onClick={handleMovePage}>
+        <button
+          type="button"
+          className="btn-13 mt-[20px]"
+          onClick={handleMovePage}
+        >
           Let&apos;s Go
         </button>
       </section>
