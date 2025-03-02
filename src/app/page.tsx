@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-import CommonBg from '@/_components/CommonBg';
-import TitleWrap from '@/_components/TitleWrap';
+import CommonBg from '@/_components/common/CommonBg';
+import TitleWrap from '@/_components/common/TitleWrap';
 
 export default function Home() {
   const router = useRouter();
