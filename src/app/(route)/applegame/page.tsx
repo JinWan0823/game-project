@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import CommonBg from '@/_components/CommonBg';
+import SoundBar from '@/_components/SoundBar';
 import TitleWrap from '@/_components/TitleWrap';
 
 export default function AppleGame() {
@@ -56,9 +57,7 @@ export default function AppleGame() {
                 </label>
                 <p>BGM {bgmOn ? 'ON' : 'OFF'}</p>
               </div>
-              <div className="sound-bar w-[120px] h-[8px] bg-[#335782]">
-                <div className="sound-vol w-[8px] h-[8px] bg-[#fff] rounded-xl" />
-              </div>
+              <SoundBar />
             </div>
           </div>
           {/* <AppleGameBoard /> */}
