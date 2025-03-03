@@ -1,6 +1,10 @@
 import Image from 'next/image';
 
-export default function AppleGameCover() {
+interface AppleGameProps {
+  handleGameStart: () => void;
+}
+
+export default function AppleGameCover({ handleGameStart }: AppleGameProps) {
   return (
     <div className="apple-cover flex justify-center items-center w-full h-full relative">
       <div className="img-box text-center">
@@ -12,7 +16,11 @@ export default function AppleGameCover() {
           height={200}
           priority
         />
-        <button type="button" className="btn-13 mt-[20px]">
+        <button
+          type="button"
+          className="btn-13 mt-[20px]"
+          onClick={handleGameStart}
+        >
           START !
         </button>
       </div>
