@@ -4,7 +4,11 @@ import { useState } from 'react';
 
 import SoundBar from './SoundBar';
 
-export default function OptionBox() {
+interface AppleGameProps {
+  handleResetGame: () => void;
+}
+
+export default function OptionBox({ handleResetGame }: AppleGameProps) {
   const [bgmOn, setBgmOn] = useState(true);
   const [volume, setVolume] = useState(20);
 
@@ -35,7 +39,9 @@ export default function OptionBox() {
         <p>BGM {bgmOn ? 'ON' : 'OFF'}</p>
         <SoundBar volume={volume} setVolume={setVolume} />
       </div>
-      <div className="reset-btn">RESET</div>
+      <button type="button" className="reset-btn" onClick={handleResetGame}>
+        RESET
+      </button>
     </div>
   );
 }
