@@ -7,6 +7,7 @@ export default function AppleGameCover() {
         <Image
           src="/apple.png"
           alt="apple img"
+          className="translate-x-2"
           width={200}
           height={200}
           priority

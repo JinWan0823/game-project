@@ -4,15 +4,26 @@ import { useEffect, useRef } from 'react';
 
 export default function AppleGameBoard() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const cols = 17; // 가로 17개
-    const rows = 10; // 세로 10개
+    // 부모 요소의 크기 가져오기
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+
+    // 캔버스 크기 조정
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+
+    const cols = 17;
+    const rows = 10;
     const boxWidth = 36;
     const boxHeight = 44;
     const padding = 6;
@@ -27,10 +38,6 @@ export default function AppleGameBoard() {
     // 전체 그리드 크기 계산
     const gridWidth = cols * (boxWidth + padding);
     const gridHeight = rows * (boxHeight + padding);
-
-    // Canvas 크기 조정
-    canvas.width = gridWidth + 220;
-    canvas.height = gridHeight + 80;
 
     // 그리드의 시작 위치 중앙 정렬
     const startX = (canvas.width - gridWidth) / 2;
@@ -60,8 +67,11 @@ export default function AppleGameBoard() {
   }, []);
 
   return (
-    <div className="game-board bg-[#fff] rounded-lg p-[12px]">
-      <canvas ref={canvasRef} className="border border-gray-300" />
+    <div ref={containerRef} className="w-full h-full relative">
+      <canvas
+        ref={canvasRef}
+        className="border border-gray-300 w-full h-full"
+      />
     </div>
   );
 }
