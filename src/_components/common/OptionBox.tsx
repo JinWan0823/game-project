@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import SoundBar from './SoundBar';
 
-export default function SoundOptionBox() {
+export default function OptionBox() {
   const [bgmOn, setBgmOn] = useState(true);
   const [volume, setVolume] = useState(20);
 
@@ -12,7 +12,7 @@ export default function SoundOptionBox() {
     setBgmOn((prev) => !prev);
   };
   return (
-    <div className="option-box absolute bottom-[8px] w-full p-4 flex items-center">
+    <div className="option-box mt-[10px] w-full flex justify-between items-center">
       <div className="sound-toggle flex items-center">
         <label
           aria-label="BGM TOGGLE"
@@ -33,8 +33,9 @@ export default function SoundOptionBox() {
           </div>
         </label>
         <p>BGM {bgmOn ? 'ON' : 'OFF'}</p>
+        <SoundBar volume={volume} setVolume={setVolume} />
       </div>
-      <SoundBar volume={volume} setVolume={setVolume} />
+      <div className="reset-btn">RESET</div>
     </div>
   );
 }
