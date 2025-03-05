@@ -1,10 +1,65 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+type Apple = {
+  x: number;
+  y: number;
+  value: number;
+  width: number;
+  height: number;
+};
 
 export default function AppleGameBoard() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  const [apples, setApples] = useState<Apple[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(
+    null
+  );
+  const [dragEnd, setDragEnd] = useState<{ x: number; y: number } | null>(null);
+
+  const drawApples = (ctx: CanvasRenderingContext2D, appleList: Apple[]) => {
+    if (!canvasRef.current || !imgRef.current) return;
+
+    const canvas = canvasRef.current;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    appleList.forEach(({ x, y, value, width, height }) => {
+      ctx.drawImage(imgRef.current as HTMLImageElement, x, y, width, height);
+      ctx.fillStyle = '#333eee';
+      ctx.font = '20px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(value.toString(), x + width / 2, y + height / 2);
+    });
+
+    if (isDragging && dragStart && dragEnd) {
+      ctx.fillStyle = 'rgba(0, 0, 255, 0.3)';
+      ctx.fillRect(
+        dragStart.x,
+        dragStart.y,
+        dragEnd.x - dragStart.x,
+        dragEnd.y - dragStart.y
+      );
+
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 2;
+      appleList.forEach(({ x, y, width, height }) => {
+        if (
+          x + width > dragStart.x &&
+          x < dragEnd.x &&
+          y + height > dragStart.y &&
+          y < dragEnd.y
+        ) {
+          ctx.strokeRect(x, y, width, height);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,63 +69,105 @@ export default function AppleGameBoard() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // 부모 요소의 크기 가져오기
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
 
-    // 캔버스 크기 조정
-    canvas.width = containerWidth;
-    canvas.height = containerHeight;
-
-    const cols = 17;
-    const rows = 10;
-    const boxWidth = 36;
-    const boxHeight = 44;
-    const padding = 6;
-
-    // 1~9의 숫자가 170개 반복되는 배열을 랜덤하게 섞기
-    const numbers = Array.from({ length: 170 }, (_, i) => (i % 9) + 1);
-    for (let i = numbers.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-    }
-
-    // 전체 그리드 크기 계산
-    const gridWidth = cols * (boxWidth + padding);
-    const gridHeight = rows * (boxHeight + padding);
-
-    // 그리드의 시작 위치 중앙 정렬
-    const startX = (canvas.width - gridWidth) / 2;
-    const startY = (canvas.height - gridHeight) / 2;
-
-    // 배경 이미지 로드
     const img = new Image();
     img.src = '/apple2.png';
+    imgRef.current = img; // 저장하여 재사용
+
     img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cols = 17;
+      const rows = 10;
+      const boxWidth = 36;
+      const boxHeight = 44;
+      const padding = 6;
 
-      numbers.forEach((num, idx) => {
-        const x = startX + (idx % cols) * (boxWidth + padding);
-        const y = startY + Math.floor(idx / cols) * (boxHeight + padding);
+      const numbers = Array.from({ length: 170 }, (_, i) => (i % 9) + 1);
+      for (let i = numbers.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+      }
 
-        // 이미지 배경 그리기
-        ctx.drawImage(img, x, y, boxWidth, boxHeight);
+      const appleArray: Apple[] = numbers.map((num, idx) => ({
+        x:
+          (canvas.width - cols * (boxWidth + padding)) / 2 +
+          (idx % cols) * (boxWidth + padding),
+        y:
+          (canvas.height - rows * (boxHeight + padding)) / 2 +
+          Math.floor(idx / cols) * (boxHeight + padding),
+        value: num,
+        width: boxWidth,
+        height: boxHeight,
+      }));
+      setApples(appleArray);
 
-        // 숫자 텍스트 그리기
-        ctx.fillStyle = '#333eee';
-        ctx.font = '20px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(num.toString(), x + boxWidth / 2, y + boxHeight / 2);
-      });
+      drawApples(ctx, appleArray); // 이미지를 로드한 후 한 번만 그리기
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    setIsDragging(true);
+    setDragStart({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
+    setDragEnd(null);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging) return;
+    setDragEnd({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    if (!dragStart || !dragEnd) return;
+
+    // 드래그 시작과 끝의 좌표를 사용하여 선택 영역을 항상 올바르게 계산
+    const minX = Math.min(dragStart.x, dragEnd.x);
+    const maxX = Math.max(dragStart.x, dragEnd.x);
+    const minY = Math.min(dragStart.y, dragEnd.y);
+    const maxY = Math.max(dragStart.y, dragEnd.y);
+
+    // 선택된 사과 필터링
+    const selectedApples = apples.filter(
+      ({ x, y, width, height }) =>
+        x + width > minX && x < maxX && y + height > minY && y < maxY
+    );
+
+    const sum = selectedApples.reduce((acc, apple) => acc + apple.value, 0);
+    if (sum === 10) {
+      setApples((prevApples) => {
+        const newApples = prevApples.filter(
+          (apple) => !selectedApples.includes(apple)
+        );
+        const ctx = canvasRef.current?.getContext('2d');
+        if (ctx) drawApples(ctx, newApples);
+        return newApples;
+      });
+    }
+
+    setDragStart(null);
+    setDragEnd(null);
+
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) drawApples(ctx, apples); // 그리기 작업 최적화
+  };
+
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) drawApples(ctx, apples); // apples 변경 시 다시 그리기
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apples]);
 
   return (
     <div ref={containerRef} className="w-full h-full relative">
       <canvas
         ref={canvasRef}
         className="border border-gray-300 w-full h-full"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
       />
     </div>
   );

@@ -6,8 +6,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none; /* 텍스트 선택 방지 */
-  -webkit-user-drag: none; /* 이미지 드래그 방지 (웹킷 브라우저용) */
+  /* user-select: none; /* 텍스트 선택 방지 */
+  /* -webkit-user-drag: none; 이미지 드래그 방지 (웹킷 브라우저용) */
 }
 
 :root {
@@ -34,9 +34,6 @@ body {
   background-repeat: repeat; /* 반복 */
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
-}
-h1 {
-  font-family: var(--font-sigmar), cursive;
 }
 
 a {

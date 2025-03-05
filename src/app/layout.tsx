@@ -29,7 +29,8 @@ export default function RootLayout({
       <body
         className={`${notoSansKor.variable} ${sigmar.variable} antialiased`}
         style={{
-          fontFamily: 'var(--font-sigmar), Arial, Helvetica, sans-serif',
+          fontFamily:
+            'var(--font-sigmar), var(--font-noto-sans), Arial, Helvetica, sans-serif',
         }}
       >
         {children}
