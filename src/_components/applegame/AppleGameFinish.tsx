@@ -1,6 +1,10 @@
 import Image from 'next/image';
 
-export default function AppleGameFinish() {
+interface AppleGameProps {
+  handleResetGame: () => void;
+}
+
+export default function AppleGameFinish({ handleResetGame }: AppleGameProps) {
   return (
     <div className="z-[99999] absolute w-full h-full flex justify-center items-center bg-[#333333b5] top-0 left-0">
       <div className="img-box text-center">
@@ -17,7 +21,11 @@ export default function AppleGameFinish() {
             91
           </p>
         </div>
-        <button type="button" className="btn-13 mt-[20px]">
+        <button
+          type="button"
+          className="btn-13 mt-[20px]"
+          onClick={handleResetGame}
+        >
           RESET !
         </button>
       </div>
