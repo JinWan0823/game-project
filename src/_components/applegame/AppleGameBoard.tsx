@@ -1,16 +1,20 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 
-type Apple = {
+interface AppleGameBoardProps {
+  setScore: React.Dispatch<SetStateAction<number>>;
+}
+
+interface Apple {
   x: number;
   y: number;
   value: number;
   width: number;
   height: number;
-};
+}
 
-export default function AppleGameBoard() {
+export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -55,6 +59,12 @@ export default function AppleGameBoard() {
       });
     }
   };
+
+  useEffect(() => {
+    const removedApples = 170 - apples.length; // 170은 초기 사과 개수
+    setScore(removedApples);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apples]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -134,6 +144,7 @@ export default function AppleGameBoard() {
         );
         const ctx = canvasRef.current?.getContext('2d');
         if (ctx) drawApples(ctx, newApples);
+
         return newApples;
       });
     }

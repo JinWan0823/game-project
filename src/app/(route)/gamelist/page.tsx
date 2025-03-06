@@ -1,6 +1,6 @@
 import CommonBg from '@/_components/common/CommonBg';
-import ListCard from '@/_components/ListCard';
 import TitleWrap from '@/_components/common/TitleWrap';
+import ListCard from '@/_components/ListCard';
 
 export default function GameList() {
   return (
