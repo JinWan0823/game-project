@@ -29,6 +29,13 @@ export default function AppleGame() {
   };
 
   const finishGame = () => {
+    const finalScore = score;
+    const bestScore = Number(window.localStorage.getItem('appleGame'));
+
+    if (!bestScore || finalScore > bestScore) {
+      window.localStorage.setItem('appleGame', String(finalScore));
+    }
+
     setGameFinish(true);
   };
 
@@ -51,6 +58,7 @@ export default function AppleGame() {
     return () => {
       clearInterval(timer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameStart]);
 
   return (
@@ -58,9 +66,10 @@ export default function AppleGame() {
       <section className="z-[9999]">
         <TitleWrap title="APPLE GAME" />
         <p className="text-right">
-          남은 시간 : {timeLeft} 점수 : {score}
+          <span>남은 시간 : {timeLeft}</span>
+          <span className="ml-[10px]">점수 : {score}</span>
         </p>
-        <div className="apple-wrap w-[960px] h-[606px] bg-[#dfdfdf] rounded-lg border-8 border-indigo-400 relative">
+        <div className="apple-wrap w-[960px] h-[606px] bg-[#dfdfdf] rounded-lg border-8 border-[--pointcolor] relative">
           {!gameStart ? (
             <AppleGameCover handleGameStart={handleGameStart} />
           ) : (
