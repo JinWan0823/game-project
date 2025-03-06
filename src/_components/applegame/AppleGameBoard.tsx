@@ -18,7 +18,7 @@ export default function AppleGameBoard() {
   const [apples, setApples] = useState<Apple[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(
-    null
+    null,
   );
   const [dragEnd, setDragEnd] = useState<{ x: number; y: number } | null>(null);
 
@@ -38,23 +38,18 @@ export default function AppleGameBoard() {
     });
 
     if (isDragging && dragStart && dragEnd) {
+      const x1 = Math.min(dragStart.x, dragEnd.x);
+      const y1 = Math.min(dragStart.y, dragEnd.y);
+      const x2 = Math.max(dragStart.x, dragEnd.x);
+      const y2 = Math.max(dragStart.y, dragEnd.y);
+
       ctx.fillStyle = 'rgba(0, 0, 255, 0.3)';
-      ctx.fillRect(
-        dragStart.x,
-        dragStart.y,
-        dragEnd.x - dragStart.x,
-        dragEnd.y - dragStart.y
-      );
+      ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
 
       ctx.strokeStyle = 'red';
       ctx.lineWidth = 2;
       appleList.forEach(({ x, y, width, height }) => {
-        if (
-          x + width > dragStart.x &&
-          x < dragEnd.x &&
-          y + height > dragStart.y &&
-          y < dragEnd.y
-        ) {
+        if (x + width > x1 && x < x2 && y + height > y1 && y < y2) {
           ctx.strokeRect(x, y, width, height);
         }
       });
@@ -72,39 +67,37 @@ export default function AppleGameBoard() {
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
 
-    const img = new Image();
-    img.src = '/apple2.png';
-    imgRef.current = img; // 저장하여 재사용
+    const cols = 17;
+    const rows = 10;
+    const boxWidth = 36;
+    const boxHeight = 44;
+    const padding = 6;
 
-    img.onload = () => {
-      const cols = 17;
-      const rows = 10;
-      const boxWidth = 36;
-      const boxHeight = 44;
-      const padding = 6;
+    if (!imgRef.current) {
+      imgRef.current = new Image();
+      imgRef.current.src = '/apple2.png';
+    }
 
-      const numbers = Array.from({ length: 170 }, (_, i) => (i % 9) + 1);
-      for (let i = numbers.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-      }
+    const numbers = Array.from({ length: 170 }, (_, i) => (i % 9) + 1);
+    for (let i = numbers.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+    }
 
-      const appleArray: Apple[] = numbers.map((num, idx) => ({
-        x:
-          (canvas.width - cols * (boxWidth + padding)) / 2 +
-          (idx % cols) * (boxWidth + padding),
-        y:
-          (canvas.height - rows * (boxHeight + padding)) / 2 +
-          Math.floor(idx / cols) * (boxHeight + padding),
-        value: num,
-        width: boxWidth,
-        height: boxHeight,
-      }));
-      setApples(appleArray);
+    const appleArray: Apple[] = numbers.map((num, idx) => ({
+      x:
+        (canvas.width - cols * (boxWidth + padding)) / 2 +
+        (idx % cols) * (boxWidth + padding),
+      y:
+        (canvas.height - rows * (boxHeight + padding)) / 2 +
+        Math.floor(idx / cols) * (boxHeight + padding),
+      value: num,
+      width: boxWidth,
+      height: boxHeight,
+    }));
+    setApples(appleArray);
 
-      drawApples(ctx, appleArray); // 이미지를 로드한 후 한 번만 그리기
-    };
-
+    imgRef.current.onload = () => drawApples(ctx, appleArray);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -123,23 +116,21 @@ export default function AppleGameBoard() {
     setIsDragging(false);
     if (!dragStart || !dragEnd) return;
 
-    // 드래그 시작과 끝의 좌표를 사용하여 선택 영역을 항상 올바르게 계산
-    const minX = Math.min(dragStart.x, dragEnd.x);
-    const maxX = Math.max(dragStart.x, dragEnd.x);
-    const minY = Math.min(dragStart.y, dragEnd.y);
-    const maxY = Math.max(dragStart.y, dragEnd.y);
+    const x1 = Math.min(dragStart.x, dragEnd.x);
+    const y1 = Math.min(dragStart.y, dragEnd.y);
+    const x2 = Math.max(dragStart.x, dragEnd.x);
+    const y2 = Math.max(dragStart.y, dragEnd.y);
 
-    // 선택된 사과 필터링
     const selectedApples = apples.filter(
       ({ x, y, width, height }) =>
-        x + width > minX && x < maxX && y + height > minY && y < maxY
+        x + width > x1 && x < x2 && y + height > y1 && y < y2,
     );
 
     const sum = selectedApples.reduce((acc, apple) => acc + apple.value, 0);
     if (sum === 10) {
       setApples((prevApples) => {
         const newApples = prevApples.filter(
-          (apple) => !selectedApples.includes(apple)
+          (apple) => !selectedApples.includes(apple),
         );
         const ctx = canvasRef.current?.getContext('2d');
         if (ctx) drawApples(ctx, newApples);
@@ -151,14 +142,14 @@ export default function AppleGameBoard() {
     setDragEnd(null);
 
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) drawApples(ctx, apples); // 그리기 작업 최적화
+    if (ctx) drawApples(ctx, apples);
   };
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) drawApples(ctx, apples); // apples 변경 시 다시 그리기
+    if (ctx) drawApples(ctx, apples);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apples]);
+  }, [apples, dragStart, dragEnd]);
 
   return (
     <div ref={containerRef} className="w-full h-full relative">
