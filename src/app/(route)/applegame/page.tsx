@@ -14,8 +14,10 @@ export default function AppleGame() {
   const [gameStart, setGameStart] = useState(false);
   const [gameFinish, setGameFinish] = useState(false);
   const [timeLeft, setTimeLeft] = useState(120);
+  const [score, setScore] = useState(0);
 
   const handleGameStart = () => {
+    setScore(0);
     setGameStart(true);
   };
 
@@ -23,6 +25,7 @@ export default function AppleGame() {
     setGameStart(false);
     setGameFinish(false);
     setTimeLeft(120);
+    setScore(0);
   };
 
   const finishGame = () => {
@@ -54,14 +57,18 @@ export default function AppleGame() {
     <main className="inner w-[1240px] py-[120px] mx-auto flex items-center justify-center">
       <section className="z-[9999]">
         <TitleWrap title="APPLE GAME" />
-        <p className="text-right">남은 시간 : {timeLeft} 점수 : 86</p>
+        <p className="text-right">
+          남은 시간 : {timeLeft} 점수 : {score}
+        </p>
         <div className="apple-wrap w-[960px] h-[606px] bg-[#dfdfdf] rounded-lg border-8 border-indigo-400 relative">
           {!gameStart ? (
             <AppleGameCover handleGameStart={handleGameStart} />
           ) : (
-            <AppleGameBoard />
+            <AppleGameBoard setScore={setScore} />
           )}
-          {gameFinish && <AppleGameFinish handleResetGame={handleResetGame} />}
+          {gameFinish && (
+            <AppleGameFinish handleResetGame={handleResetGame} score={score} />
+          )}
         </div>
         <OptionBox handleResetGame={handleResetGame} />
       </section>

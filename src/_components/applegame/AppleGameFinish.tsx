@@ -2,9 +2,13 @@ import Image from 'next/image';
 
 interface AppleGameProps {
   handleResetGame: () => void;
+  score: number;
 }
 
-export default function AppleGameFinish({ handleResetGame }: AppleGameProps) {
+export default function AppleGameFinish({
+  handleResetGame,
+  score,
+}: AppleGameProps) {
   return (
     <div className="z-[99999] absolute w-full h-full flex justify-center items-center bg-[#333333b5] top-0 left-0">
       <div className="img-box text-center">
@@ -18,7 +22,7 @@ export default function AppleGameFinish({ handleResetGame }: AppleGameProps) {
             priority
           />
           <p className="text-6xl absolute text-[#333] top-1/2 left-1/2 translate-x-[-50%]">
-            91
+            {score}
           </p>
         </div>
         <button
