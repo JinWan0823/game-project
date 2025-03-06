@@ -39,7 +39,11 @@ export default function OptionBox({ handleResetGame }: AppleGameProps) {
         <p>BGM {bgmOn ? 'ON' : 'OFF'}</p>
         <SoundBar volume={volume} setVolume={setVolume} />
       </div>
-      <button type="button" className="reset-btn" onClick={handleResetGame}>
+      <button
+        type="button"
+        className="reset-btn bg-[--pointcolor] p-1 rounded-lg"
+        onClick={handleResetGame}
+      >
         RESET
       </button>
     </div>
