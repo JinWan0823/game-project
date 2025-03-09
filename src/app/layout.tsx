@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Noto_Sans_KR, Sigmar } from 'next/font/google';
+
 import './globals.css';
+import BackBtn from '@/_components/common/BackBtn';
 
 const sigmar = Sigmar({
   weight: '400',
@@ -33,6 +35,7 @@ export default function RootLayout({
             'var(--font-sigmar), var(--font-noto-sans), Arial, Helvetica, sans-serif',
         }}
       >
+        <BackBtn />
         {children}
       </body>
     </html>
