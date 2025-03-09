@@ -61,8 +61,8 @@ export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
   };
 
   useEffect(() => {
-    const removedApples = 170 - apples.length; // 170은 초기 사과 개수
-    setScore(removedApples);
+    const removedApples = 170 - apples.length;
+    setScore(() => removedApples);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apples]);
 

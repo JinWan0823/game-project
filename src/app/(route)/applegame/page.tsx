@@ -13,7 +13,7 @@ import TitleWrap from '@/_components/common/TitleWrap';
 export default function AppleGame() {
   const [gameStart, setGameStart] = useState(false);
   const [gameFinish, setGameFinish] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(120);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
 
   const handleGameStart = () => {
@@ -24,30 +24,37 @@ export default function AppleGame() {
   const handleResetGame = () => {
     setGameStart(false);
     setGameFinish(false);
-    setTimeLeft(120);
+    setTimeLeft(10);
     setScore(0);
   };
 
   const finishGame = () => {
-    const finalScore = score;
-    const bestScore = Number(window.localStorage.getItem('appleGame'));
+    if (gameFinish) return; // 게임이 이미 끝났다면 실행하지 않음
 
-    if (!bestScore || finalScore > bestScore) {
-      window.localStorage.setItem('appleGame', String(finalScore));
-    }
+    setTimeLeft(0); // 시간을 0으로 확정
+    setGameFinish(true); // 게임 종료 상태 변경
 
-    setGameFinish(true);
+    setScore((prevScore) => {
+      const finalScore = prevScore;
+      const bestScore = Number(window.localStorage.getItem('appleGame')) || 0;
+
+      if (finalScore > bestScore) {
+        window.localStorage.setItem('appleGame', String(finalScore));
+      }
+      return finalScore;
+    });
   };
 
   useEffect(() => {
-    if (!gameStart) return undefined; // 게임이 시작되지 않으면 실행 안 함
+    if (!gameStart || gameFinish) return undefined; // 게임이 시작되지 않으면 실행 안 함
 
-    setTimeLeft(120); // 게임 시작 시 시간 초기화
+    setTimeLeft(10); // 게임 시작 시 시간 초기화
     setGameFinish(false); // 게임 종료 화면 초기화
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
+          clearInterval(timer);
           finishGame();
           return 0;
         }
