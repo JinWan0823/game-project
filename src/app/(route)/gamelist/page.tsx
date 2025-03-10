@@ -1,6 +1,7 @@
 import CommonBg from '@/_components/common/CommonBg';
 import TitleWrap from '@/_components/common/TitleWrap';
 import ListCard from '@/_components/ListCard';
+import UpdateCard from '@/_components/UpdateCard';
 
 export default function GameList() {
   return (
@@ -11,6 +12,7 @@ export default function GameList() {
         <ul className="grid grid-cols-3 gap-6 mt-[36px]">
           <ListCard game="Apple Game" />
           <ListCard game="Rps Game" />
+          <UpdateCard />
         </ul>
       </section>
       <CommonBg />
