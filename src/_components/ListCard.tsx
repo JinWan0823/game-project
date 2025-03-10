@@ -23,6 +23,8 @@ export default function ListCard({ game }: GameProps) {
     setRotation({ x: 0, y: 0 });
   };
 
+  const myScore = window.localStorage.getItem('Apple Game');
+
   return (
     <li
       className="p-[12px] bg-white rounded-lg shadow-[5px_5px_15px_rgba(0,0,0,0.2),inset_-2px_-2px_5px_rgba(0,0,0,0.1)] border border-gray-200 transition-all duration-300 hover:border-gray-300"
@@ -33,7 +35,7 @@ export default function ListCard({ game }: GameProps) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <Link href="/applegame">
+      <Link href={`/${game.split(' ').join('').toLowerCase()}`}>
         <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative">
           <Image
             className="absolute top-1/2 left-1/2 w-[600px] h-[300px] object-cover"
@@ -51,7 +53,7 @@ export default function ListCard({ game }: GameProps) {
         <div className="p-[4px]">
           <h2 className="text-xl point mb-[4px]">{game}</h2>
           <p className="text-[#333]">Best Score : 10,000</p>
-          <p className="text-[#333]">My Score : 600 </p>
+          <p className="text-[#333]">My Score : {myScore} </p>
         </div>
       </Link>
     </li>

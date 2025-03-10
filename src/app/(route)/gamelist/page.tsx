@@ -10,10 +10,7 @@ export default function GameList() {
 
         <ul className="grid grid-cols-3 gap-6 mt-[36px]">
           <ListCard game="Apple Game" />
-          <ListCard game="Apple Game" />
-          <ListCard game="Apple Game" />
-          <ListCard game="Apple Game" />
-          <ListCard game="Apple Game" />
+          <ListCard game="Rps Game" />
         </ul>
       </section>
       <CommonBg />

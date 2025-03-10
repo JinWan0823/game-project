@@ -13,7 +13,7 @@ import TitleWrap from '@/_components/common/TitleWrap';
 export default function AppleGame() {
   const [gameStart, setGameStart] = useState(false);
   const [gameFinish, setGameFinish] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(120);
   const [score, setScore] = useState(0);
 
   const handleGameStart = () => {
@@ -24,7 +24,7 @@ export default function AppleGame() {
   const handleResetGame = () => {
     setGameStart(false);
     setGameFinish(false);
-    setTimeLeft(10);
+    setTimeLeft(120);
     setScore(0);
   };
 
@@ -36,10 +36,10 @@ export default function AppleGame() {
 
     setScore((prevScore) => {
       const finalScore = prevScore;
-      const bestScore = Number(window.localStorage.getItem('appleGame')) || 0;
+      const bestScore = Number(window.localStorage.getItem('Apple Game')) || 0;
 
       if (finalScore > bestScore) {
-        window.localStorage.setItem('appleGame', String(finalScore));
+        window.localStorage.setItem('Apple Game', String(finalScore));
       }
       return finalScore;
     });
@@ -48,7 +48,7 @@ export default function AppleGame() {
   useEffect(() => {
     if (!gameStart || gameFinish) return undefined; // 게임이 시작되지 않으면 실행 안 함
 
-    setTimeLeft(10); // 게임 시작 시 시간 초기화
+    setTimeLeft(120); // 게임 시작 시 시간 초기화
     setGameFinish(false); // 게임 종료 화면 초기화
 
     const timer = setInterval(() => {
