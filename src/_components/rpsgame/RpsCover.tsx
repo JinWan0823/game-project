@@ -1,6 +1,11 @@
 import Image from 'next/image';
+import { Dispatch, SetStateAction } from 'react';
 
-export default function RpsCover() {
+interface GameStartProps {
+  setGameStart: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function RpsCover({ setGameStart }: GameStartProps) {
   return (
     <div className="w-full h-full absolute top-0 left-0 z-[999] bg-[#dfdfdf] flex justify-center items-center">
       <div className="img-box text-center">
@@ -27,7 +32,11 @@ export default function RpsCover() {
             priority
           />
         </div>
-        <button type="button" className="btn-13 mt-[20px]">
+        <button
+          type="button"
+          className="btn-13 mt-[20px]"
+          onClick={() => setGameStart(true)}
+        >
           START !
         </button>
       </div>
