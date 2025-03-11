@@ -1,13 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import ComRps from './ComRps';
 import ResultRps from './ResultRps';
 import RpsOpt from './RpsOpt';
 
-export default function RpsGameBoard() {
+interface ScoreProps {
+  setScore: Dispatch<SetStateAction<number>>;
+}
+
+export default function RpsGameBoard({ setScore }: ScoreProps) {
   const [selectRps, setSelectRps] = useState('rock');
   const [selected, setSelected] = useState<boolean | number>(false);
   const [comSelectRps, setComSelectRps] = useState('question');
@@ -30,8 +34,23 @@ export default function RpsGameBoard() {
       return 'lose';
     };
 
-    setRpsResult(getResult(selectRps, comSelectRps));
-  }, [comSelectRps, selectRps]);
+    const result = getResult(selectRps, comSelectRps);
+    setRpsResult(result);
+    console.log(result);
+
+    // 점수 업데이트 로직 (중복 호출 방지)
+    setScore((prevScore) => {
+      if (result === 'win') {
+        return prevScore + 1;
+      }
+      if (result === 'lose') {
+        return 0;
+      }
+      return prevScore; // draw인 경우 점수 유지
+    });
+
+    console.log('결과', result);
+  }, [comSelectRps, selectRps, setScore]);
 
   return (
     <>
