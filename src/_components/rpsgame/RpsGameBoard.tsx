@@ -9,9 +9,13 @@ import RpsOpt from './RpsOpt';
 
 interface ScoreProps {
   setScore: Dispatch<SetStateAction<number>>;
+  handleGameFinish: () => void;
 }
 
-export default function RpsGameBoard({ setScore }: ScoreProps) {
+export default function RpsGameBoard({
+  setScore,
+  handleGameFinish,
+}: ScoreProps) {
   const [selectRps, setSelectRps] = useState('rock');
   const [selected, setSelected] = useState<boolean | number>(false);
   const [comSelectRps, setComSelectRps] = useState('question');
@@ -44,6 +48,7 @@ export default function RpsGameBoard({ setScore }: ScoreProps) {
         return prevScore + 1;
       }
       if (result === 'lose') {
+        handleGameFinish();
         return 0;
       }
       return prevScore; // draw인 경우 점수 유지
