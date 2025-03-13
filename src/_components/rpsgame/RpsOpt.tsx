@@ -1,21 +1,11 @@
 import Image from 'next/image';
-import { SetStateAction } from 'react';
 
 interface RpsProps {
+  handleSelectRps: () => void;
   option: string;
-  setSelectRps: React.Dispatch<SetStateAction<string>>;
-  setSelected: React.Dispatch<SetStateAction<boolean | number>>;
 }
 
-export default function RpsOpt({
-  option,
-  setSelectRps,
-  setSelected,
-}: RpsProps) {
-  const handleSelectRps = () => {
-    setSelectRps(option);
-    setSelected(Date.now());
-  };
+export default function RpsOpt({ handleSelectRps, option }: RpsProps) {
   return (
     <li>
       <button

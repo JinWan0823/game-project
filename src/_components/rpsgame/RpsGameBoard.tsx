@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 
 import ComRps from './ComRps';
 import ResultRps from './ResultRps';
@@ -9,23 +9,40 @@ import RpsOpt from './RpsOpt';
 
 interface ScoreProps {
   setScore: Dispatch<SetStateAction<number>>;
+  setStreak: Dispatch<SetStateAction<number>>;
+  streak: number;
+  setRemainingChances: Dispatch<SetStateAction<number>>;
   handleGameFinish: () => void;
+  comSelectRps: string;
+  setComSelectRps: Dispatch<SetStateAction<string>>;
 }
 
 export default function RpsGameBoard({
   setScore,
+  setStreak,
+  streak,
+  setRemainingChances,
   handleGameFinish,
+  comSelectRps,
+  setComSelectRps,
 }: ScoreProps) {
   const [selectRps, setSelectRps] = useState('rock');
   const [selected, setSelected] = useState<boolean | number>(false);
-  const [comSelectRps, setComSelectRps] = useState('question');
   const [rpsResult, setRpsResult] = useState('');
 
   const rps = ['rock', 'scissors', 'paper'];
 
-  useEffect(() => {
-    if (comSelectRps === 'question') return; // 초기 상태일 때는 승패 판정 X
+  // 선택한 가위바위보에 대해 처리
+  const handleSelectRps = (userChoice: string) => {
+    setSelectRps(userChoice);
+    setSelected(true);
 
+    // 컴퓨터 선택 (랜덤)
+    const randomIndex = Math.floor(Math.random() * rps.length);
+    const comChoice = rps[randomIndex];
+    setComSelectRps(comChoice);
+
+    // 승패 판정 함수
     const getResult = (user: string, com: string) => {
       if (user === com) return 'draw';
       if (
@@ -38,24 +55,34 @@ export default function RpsGameBoard({
       return 'lose';
     };
 
-    const result = getResult(selectRps, comSelectRps);
+    const result = getResult(userChoice, comChoice);
     setRpsResult(result);
-    console.log(result);
 
-    // 점수 업데이트 로직 (중복 호출 방지)
+    // 점수 업데이트
     setScore((prevScore) => {
       if (result === 'win') {
-        return prevScore + 1;
+        const newStreak = streak * 2; // 연승 시 2배 증가
+        setStreak(newStreak);
+        return prevScore + newStreak;
       }
       if (result === 'lose') {
-        handleGameFinish();
-        return 0;
+        setStreak(1); // 패배 시 연승 초기화
+        if (prevScore === 0) {
+          return prevScore;
+        }
+        return prevScore - 1;
       }
-      return prevScore; // draw인 경우 점수 유지
+      return prevScore; // 무승부면 점수 유지
     });
 
-    console.log('결과', result);
-  }, [comSelectRps, selectRps, setScore]);
+    // 기회 감소
+    setRemainingChances((prev) => {
+      if (prev - 1 === 0) {
+        handleGameFinish();
+      }
+      return prev - 1;
+    });
+  };
 
   return (
     <>
@@ -91,8 +118,7 @@ export default function RpsGameBoard({
             <RpsOpt
               key={item}
               option={item}
-              setSelectRps={setSelectRps}
-              setSelected={setSelected}
+              handleSelectRps={() => handleSelectRps(item)} // 클릭 시 `handleSelectRps` 호출
             />
           ))}
         </ul>

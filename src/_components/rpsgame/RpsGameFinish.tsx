@@ -2,9 +2,13 @@ import Image from 'next/image';
 
 interface AppleGameProps {
   score: number;
+  handleResetGame: () => void;
 }
 
-export default function RpsGameFinish({ score }: AppleGameProps) {
+export default function RpsGameFinish({
+  score,
+  handleResetGame,
+}: AppleGameProps) {
   return (
     <div className="z-[99999] absolute w-full h-full flex justify-center items-center bg-[#333333b5] top-0 left-0">
       <div className="img-box text-center">
@@ -34,7 +38,11 @@ export default function RpsGameFinish({ score }: AppleGameProps) {
           </div>
           <p className="text-6xl text-[--pointcolor]">{score}</p>
         </div>
-        <button type="button" className="btn-13 mt-[20px]">
+        <button
+          type="button"
+          className="btn-13 mt-[20px]"
+          onClick={handleResetGame}
+        >
           RESET !
         </button>
       </div>
