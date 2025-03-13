@@ -13,13 +13,15 @@ export default function ResultRps({ setRpsResult, rpsResult }: ResultRpsProps) {
       setRpsResult('');
     }, 1000);
 
-    return () => clearTimeout(timer); // 컴포넌트 언마운트 시 클리어
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rpsResult]);
 
   return (
-    <h2 className="absolute bg-[--pointcolor] text-[#fff] text-7xl top-1/2 left-1/2 translate-x-[-50%] rotate-[-12deg] rounded-xl p-4 px-[60px]">
-      {rpsResult}!
-    </h2>
+    <div className="absolute top-0 left-0 w-full h-full z-[9999] flex justify-center items-center">
+      <h2 className="bg-[--pointcolor] inline-block text-[#fff] text-7xl rotate-[-12deg] rounded-xl p-4 px-[60px]">
+        {rpsResult}!
+      </h2>
+    </div>
   );
 }
