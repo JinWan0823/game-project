@@ -16,6 +16,9 @@ export default function RpsGame() {
   const [streak, setStreak] = useState(1); // 연승 배율
   const [remainingChances, setRemainingChances] = useState(10); // 10번 기회
   const [comSelectRps, setComSelectRps] = useState('question');
+  const [roundResult, setRoundResult] = useState<string[]>(
+    Array(10).fill('gray'),
+  );
 
   const handleResetGame = () => {
     setScore(0);
@@ -24,6 +27,7 @@ export default function RpsGame() {
     setGameStart(false);
     setGameFinish(false);
     setComSelectRps('question');
+    setRoundResult([]);
   };
 
   const handleGameFinish = () => {
@@ -47,6 +51,8 @@ export default function RpsGame() {
             handleGameFinish={handleGameFinish}
             comSelectRps={comSelectRps}
             setComSelectRps={setComSelectRps}
+            roundResult={roundResult}
+            setRoundResult={setRoundResult}
           />
           {!gameStart && <RpsCover setGameStart={setGameStart} />}
           {gameFinish && (

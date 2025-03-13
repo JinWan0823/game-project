@@ -6,6 +6,7 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import ComRps from './ComRps';
 import ResultRps from './ResultRps';
 import RpsOpt from './RpsOpt';
+import RpsRoundResult from './RpsRoundResult';
 
 interface ScoreProps {
   setScore: Dispatch<SetStateAction<number>>;
@@ -15,6 +16,8 @@ interface ScoreProps {
   handleGameFinish: () => void;
   comSelectRps: string;
   setComSelectRps: Dispatch<SetStateAction<string>>;
+  roundResult: string[];
+  setRoundResult: Dispatch<SetStateAction<string[]>>;
 }
 
 export default function RpsGameBoard({
@@ -25,6 +28,8 @@ export default function RpsGameBoard({
   handleGameFinish,
   comSelectRps,
   setComSelectRps,
+  roundResult,
+  setRoundResult,
 }: ScoreProps) {
   const [selectRps, setSelectRps] = useState('rock');
   const [selected, setSelected] = useState<boolean | number>(false);
@@ -32,17 +37,14 @@ export default function RpsGameBoard({
 
   const rps = ['rock', 'scissors', 'paper'];
 
-  // 선택한 가위바위보에 대해 처리
   const handleSelectRps = (userChoice: string) => {
     setSelectRps(userChoice);
     setSelected(true);
 
-    // 컴퓨터 선택 (랜덤)
     const randomIndex = Math.floor(Math.random() * rps.length);
     const comChoice = rps[randomIndex];
     setComSelectRps(comChoice);
 
-    // 승패 판정 함수
     const getResult = (user: string, com: string) => {
       if (user === com) return 'draw';
       if (
@@ -58,21 +60,31 @@ export default function RpsGameBoard({
     const result = getResult(userChoice, comChoice);
     setRpsResult(result);
 
-    // 점수 업데이트
+    setRoundResult((prev) => {
+      const newResults = [...prev];
+      const nextIndex = prev.findIndex((item) => item === 'gray');
+
+      if (nextIndex !== -1) {
+        newResults[nextIndex] = result;
+      }
+      return newResults;
+    });
+
     setScore((prevScore) => {
       if (result === 'win') {
-        const newStreak = streak * 2; // 연승 시 2배 증가
-        setStreak(newStreak);
-        return prevScore + newStreak;
+        return (
+          setStreak((prevStreak) => {
+            const newStreak = prevStreak * 2; // 연승 시 2배 증가
+            return newStreak;
+          }),
+          prevScore + streak
+        ); // streak 값이 이전 연승 값을 기준으로 계산됨
       }
       if (result === 'lose') {
-        setStreak(1); // 패배 시 연승 초기화
-        if (prevScore === 0) {
-          return prevScore;
-        }
-        return prevScore - 1;
+        setStreak(1);
+        return prevScore > 0 ? prevScore - 1 : prevScore;
       }
-      return prevScore; // 무승부면 점수 유지
+      return prevScore;
     });
 
     // 기회 감소
@@ -108,11 +120,11 @@ export default function RpsGameBoard({
         <div className="absolute w-[1px] h-[100%] bg-[#333] top-0 left-1/2 translate-x-[-50%] flex items-center justify-center">
           <span className="text-7xl">VS</span>
         </div>
-        {rpsResult && (
-          <ResultRps setRpsResult={setRpsResult} rpsResult={rpsResult} />
-        )}
       </div>
-      <div className="option-bar p-[20px]">
+      {rpsResult && (
+        <ResultRps setRpsResult={setRpsResult} rpsResult={rpsResult} />
+      )}
+      <div className="option-bar p-[20px] relative">
         <ul className="flex justify-center items-center">
           {rps.map((item) => (
             <RpsOpt
@@ -122,6 +134,7 @@ export default function RpsGameBoard({
             />
           ))}
         </ul>
+        <RpsRoundResult roundResult={roundResult} />
       </div>
     </>
   );
