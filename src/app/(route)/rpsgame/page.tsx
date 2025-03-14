@@ -27,11 +27,18 @@ export default function RpsGame() {
     setGameStart(false);
     setGameFinish(false);
     setComSelectRps('question');
-    setRoundResult([]);
+    setRoundResult(Array(10).fill('gray'));
   };
 
   const handleGameFinish = () => {
     setGameFinish(true);
+
+    const finalScore = score;
+    const bestScore = Number(window.localStorage.getItem('RPS Game'));
+
+    if (finalScore > bestScore) {
+      window.localStorage.setItem('RPS Game', String(finalScore));
+    }
   };
 
   return (
