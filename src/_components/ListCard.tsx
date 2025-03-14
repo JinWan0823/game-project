@@ -23,7 +23,7 @@ export default function ListCard({ game }: GameProps) {
     setRotation({ x: 0, y: 0 });
   };
 
-  const myScore = window.localStorage.getItem('Apple Game');
+  const myScore = window.localStorage.getItem(game);
 
   return (
     <li
@@ -43,7 +43,7 @@ export default function ListCard({ game }: GameProps) {
               transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 0.5}deg) rotateY(${rotation.y * 0.5}deg) translate3d(-50%, -50%, 0)`,
               transition: 'transform 0.1s ease-out',
             }}
-            src="/img111.jpg"
+            src={`/${game}.png`}
             alt="card-img"
             width={600}
             height={300}
