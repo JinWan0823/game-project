@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 import CommonBg from '@/_components/common/CommonBg';
-import TitleWrap from '@/_components/common/TitleWrap';
 import CommonBtn from '@/_components/common/CommonBtn';
+import TitleWrap from '@/_components/common/TitleWrap';
 
 export const metadata: Metadata = {
   title: '404 Page not found',

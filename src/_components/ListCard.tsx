@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface GameProps {
   game: string;
@@ -10,6 +10,7 @@ interface GameProps {
 
 export default function ListCard({ game }: GameProps) {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [myScore, setMyScore] = useState<string | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLLIElement>) => {
     const { left, top, width, height } =
@@ -23,8 +24,11 @@ export default function ListCard({ game }: GameProps) {
     setRotation({ x: 0, y: 0 });
   };
 
-  const myScore = window.localStorage.getItem(game);
-
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setMyScore(localStorage.getItem(game));
+    }
+  }, [game]);
   return (
     <li
       className="p-[12px] bg-white rounded-lg shadow-[5px_5px_15px_rgba(0,0,0,0.2),inset_-2px_-2px_5px_rgba(0,0,0,0.1)] border border-gray-200 transition-all duration-300 hover:border-gray-300"

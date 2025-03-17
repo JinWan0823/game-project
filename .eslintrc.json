@@ -1,18 +1,12 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "airbnb",
-    "airbnb/hooks",
-    "airbnb-typescript",
-    "prettier"
-  ],
+  "extends": ["next/core-web-vitals", "next", "prettier"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
   "plugins": ["prettier"],
   "rules": {
-    "import/extensions": "off", // 확장자 없이도 import 가능
-    "react/no-array-index-key": "off", // 데이터가 정적일 경우 index 사용
+    "import/extensions": "off",
+    "react/no-array-index-key": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "react/react-in-jsx-scope": "off",
@@ -21,7 +15,7 @@
       "error",
       { "namedComponents": ["arrow-function", "function-declaration"] }
     ],
-    "sort-imports": "off", //import 정렬 관련 충돌 방지
+    "sort-imports": "off",
     "import/order": [
       "error",
       {
