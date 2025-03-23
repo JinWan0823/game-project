@@ -16,7 +16,7 @@ export default function BrickGameBoard({
   const [isGameOver, setIsGameOver] = useState(false);
   const [stage, setStage] = useState(1);
 
-  const ballRef = useRef({ x: 250, y: 250, dx: 6, dy: -6, radius: 10 });
+  const ballRef = useRef({ x: 450, y: 450, dx: 6, dy: -6, radius: 10 });
   const paddleRef = useRef({ width: 100, height: 10, x: 200, y: 590 });
 
   // 벽돌 설정
@@ -110,6 +110,9 @@ export default function BrickGameBoard({
     if (newY + ball.radius > canvasRef.current!.height) {
       setIsGameOver(true);
       handleGameFinish();
+
+      ballRef.current.radius = 0;
+
       return;
     }
 
@@ -196,8 +199,8 @@ export default function BrickGameBoard({
   useEffect(() => {
     bricksRef.current = generateBricks();
     ballRef.current = {
-      x: 250,
-      y: 250,
+      x: 450,
+      y: 450,
       dx: 6 + stage, // 스테이지 증가에 따라 속도 증가
       dy: -(6 + stage),
       radius: 10,

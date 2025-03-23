@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 import BrickGameBoard from '@/_components/brickgame/BrickGameBoard';
+import BrickGameCover from '@/_components/brickgame/BrickGameCover';
 import BrickGameFinish from '@/_components/brickgame/BrickGameFinish';
 import CommonBg from '@/_components/common/CommonBg';
 import TitleWrap from '@/_components/common/TitleWrap';
@@ -9,7 +10,7 @@ import TitleWrap from '@/_components/common/TitleWrap';
 export default function BrickGame() {
   const [score, setScore] = useState(0);
   const [gameFinish, setGameFinish] = useState(false);
-  const [resetGame, SetResetGame] = useState(false);
+  const [gameStart, setGameStart] = useState(true);
 
   const handleGameFinish = () => {
     setGameFinish(true);
@@ -23,8 +24,12 @@ export default function BrickGame() {
 
   const handleGameReset = () => {
     setGameFinish(false);
+    setGameStart(true);
     setScore(0);
-    SetResetGame((prev) => !prev);
+  };
+
+  const handleGameStart = () => {
+    setGameStart(false);
   };
 
   return (
@@ -35,10 +40,14 @@ export default function BrickGame() {
           <span className="ml-[10px]">점수 : {score}</span>
         </p>
         <div className="w-[1160px]  bg-[#dfdfdf] rounded-lg border-8 border-[--pointcolor] relative">
-          <BrickGameBoard
-            setScore={setScore}
-            handleGameFinish={handleGameFinish}
-          />
+          {gameStart ? (
+            <BrickGameCover handleGameStart={handleGameStart} />
+          ) : (
+            <BrickGameBoard
+              setScore={setScore}
+              handleGameFinish={handleGameFinish}
+            />
+          )}
           {gameFinish && (
             <BrickGameFinish score={score} handleGameReset={handleGameReset} />
           )}
