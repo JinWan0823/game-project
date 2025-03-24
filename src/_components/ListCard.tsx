@@ -26,7 +26,9 @@ export default function ListCard({ game }: GameProps) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setMyScore(localStorage.getItem(game));
+      localStorage.getItem(game)
+        ? setMyScore(localStorage.getItem(game))
+        : setMyScore(String(0));
     }
   }, [game]);
   return (
@@ -40,11 +42,11 @@ export default function ListCard({ game }: GameProps) {
       onMouseLeave={handleMouseLeave}
     >
       <Link href={`/${game.split(' ').join('').toLowerCase()}`}>
-        <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative">
+        <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative flex items-center justify-center">
           <Image
-            className="absolute top-1/2 left-1/2 w-[600px] h-[300px] object-cover"
+            className="w-[600px] h-[300px] object-cover"
             style={{
-              transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 0.5}deg) rotateY(${rotation.y * 0.5}deg) translate3d(-50%, -50%, 0)`,
+              transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 1.5}deg) rotateY(${rotation.y * 1.5}deg)`,
               transition: 'transform 0.1s ease-out',
             }}
             src={`/${game}.png`}
