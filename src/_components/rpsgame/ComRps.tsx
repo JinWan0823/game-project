@@ -22,7 +22,6 @@ export default function ComRps({
     const randomRps = Math.floor(Math.random() * rps.length);
     const comRps = rps[randomRps];
     setComSelectRps(comRps);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   return (
