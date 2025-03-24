@@ -28,24 +28,24 @@ export default function UpdateCard() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative">
+      <figure className="w-full h-[220px] bg-[#333] overflow-hidden rounded-lg relative flex items-center justify-center">
         <Image
-          className="absolute top-1/2 left-1/2 w-[600px] h-[300px] object-cover"
+          className="w-[600px] h-[300px] object-cover"
           style={{
-            transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 0.5}deg) rotateY(${rotation.y * 0.5}deg) translate3d(-50%, -50%, 0)`,
+            transform: `perspective(600px) scale(1.2) rotateX(${rotation.x * 1.5}deg) rotateY(${rotation.y * 1.5}deg)`,
             transition: 'transform 0.1s ease-out',
           }}
-          src="/img111.jpg"
+          src={`/comming.jpg`}
           alt="card-img"
           width={600}
           height={300}
           priority
         />
       </figure>
-      <div className="p-[4px] flex items-center justify-center">
-        <p className="text-xl text-center text-[--pointcolor]">
-          Comming Soon..
-        </p>
+      <div className="p-[4px]">
+        <h2 className="text-xl text-center point">Comming Soon..</h2>
+        <p className="text-[#333] opacity-0">Best Score :</p>
+        <p className="text-[#333] opacity-0">My Score : </p>
       </div>
     </li>
   );
