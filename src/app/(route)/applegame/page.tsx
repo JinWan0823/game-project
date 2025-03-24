@@ -65,7 +65,6 @@ export default function AppleGame() {
     return () => {
       clearInterval(timer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameStart]);
 
   return (

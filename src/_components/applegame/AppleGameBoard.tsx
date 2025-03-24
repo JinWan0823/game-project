@@ -26,19 +26,49 @@ export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
   );
   const [dragEnd, setDragEnd] = useState<{ x: number; y: number } | null>(null);
 
+  const drawAppleShape = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number,
+  ) => {
+    ctx.save();
+    ctx.translate(x, y);
+
+    // 잎사귀
+    ctx.beginPath();
+    ctx.moveTo(size * 0.2, -size * 0.6);
+    ctx.quadraticCurveTo(size * 0.5, -size, size * 0.7, -size * 0.6);
+    ctx.quadraticCurveTo(size * 0.5, -size * 0.2, size * 0.2, -size * 0.6);
+    ctx.fillStyle = '#2E8B57';
+    ctx.fill();
+
+    // 사과 본체
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#FF0000';
+    ctx.fill();
+    ctx.strokeStyle = '#AA0000';
+    ctx.lineWidth = size * 0.05;
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
   const drawApples = (ctx: CanvasRenderingContext2D, appleList: Apple[]) => {
     if (!canvasRef.current || !imgRef.current) return;
 
     const canvas = canvasRef.current;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    appleList.forEach(({ x, y, value, width, height }) => {
-      ctx.drawImage(imgRef.current as HTMLImageElement, x, y, width, height);
-      ctx.fillStyle = '#333eee';
+    appleList.forEach(({ x, y, value, width }) => {
+      drawAppleShape(ctx, x + width / 2, y + width / 2, width);
+
+      ctx.fillStyle = '#FFF';
       ctx.font = '20px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(value.toString(), x + width / 2, y + height / 2);
+      ctx.fillText(value.toString(), x + width / 2, y + width / 2);
     });
 
     if (isDragging && dragStart && dragEnd) {
@@ -63,7 +93,6 @@ export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
   useEffect(() => {
     const removedApples = 170 - apples.length;
     setScore(() => removedApples);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apples]);
 
   useEffect(() => {
@@ -108,7 +137,6 @@ export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
     setApples(appleArray);
 
     imgRef.current.onload = () => drawApples(ctx, appleArray);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
