@@ -66,7 +66,7 @@ export default function RpsGame() {
             <RpsGameFinish score={score} handleResetGame={handleResetGame} />
           )}
         </div>
-        <OptionBox handleResetGame={handleResetGame} />
+        <OptionBox handleResetGame={handleResetGame} gameStart={gameStart} />
       </section>
       <CommonBg />
     </main>
