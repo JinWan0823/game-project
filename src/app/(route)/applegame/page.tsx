@@ -85,7 +85,7 @@ export default function AppleGame() {
             <AppleGameFinish handleResetGame={handleResetGame} score={score} />
           )}
         </div>
-        <OptionBox handleResetGame={handleResetGame} />
+        <OptionBox handleResetGame={handleResetGame} gameStart={gameStart} />
       </section>
       <CommonBg />
     </main>

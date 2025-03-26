@@ -5,6 +5,7 @@ import BrickGameBoard from '@/_components/brickgame/BrickGameBoard';
 import BrickGameCover from '@/_components/brickgame/BrickGameCover';
 import BrickGameFinish from '@/_components/brickgame/BrickGameFinish';
 import CommonBg from '@/_components/common/CommonBg';
+import OptionBox from '@/_components/common/OptionBox';
 import TitleWrap from '@/_components/common/TitleWrap';
 
 export default function BrickGame() {
@@ -52,6 +53,7 @@ export default function BrickGame() {
             <BrickGameFinish score={score} handleGameReset={handleGameReset} />
           )}
         </div>
+        <OptionBox handleResetGame={handleGameReset} gameStart={!gameStart} />
       </section>
       <CommonBg />
     </main>
