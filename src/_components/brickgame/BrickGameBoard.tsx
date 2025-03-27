@@ -18,7 +18,7 @@ export default function BrickGameBoard({
 
   const ballRef = useRef({ x: 450, y: 450, dx: 6, dy: -6, radius: 10 });
   const paddleRef = useRef({ width: 100, height: 10, x: 200, y: 590 });
-
+  const animationFrameId = useRef<number | null>(null);
   // 벽돌 설정
   const brickRowCount = 5;
   const brickColumnCount = 10;
@@ -108,8 +108,8 @@ export default function BrickGameBoard({
     }
 
     if (newY + ball.radius > canvasRef.current!.height) {
-      setIsGameOver(true);
       handleGameFinish();
+      setIsGameOver(true);
 
       ballRef.current.radius = 0;
 
@@ -123,49 +123,59 @@ export default function BrickGameBoard({
   };
 
   useEffect(() => {
-    if (ctx) {
-      const gameLoop = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return; // Early return if canvasRef is null
+    if (!ctx || isGameOver) return; // 게임 오버 시 실행 X
 
-        if (isGameOver) return;
-        ctx.clearRect(
-          0,
-          0,
-          canvasRef.current!.width,
-          canvasRef.current!.height,
-        );
-        bricksRef.current.forEach((row) =>
-          row.forEach((brick) => {
-            if (brick.status === 1) {
-              ctx.fillStyle = '#FF5733';
-              ctx.fillRect(brick.x, brick.y, brickWidth, brickHeight);
-            }
-          }),
-        );
-        ctx.beginPath();
-        ctx.arc(
-          ballRef.current.x,
-          ballRef.current.y,
-          ballRef.current.radius,
-          0,
-          Math.PI * 2,
-        );
-        ctx.fillStyle = '#0095DD';
-        ctx.fill();
-        ctx.closePath();
-        ctx.fillStyle = '#0095DD';
-        ctx.fillRect(
-          paddleRef.current.x,
-          paddleRef.current.y,
-          paddleRef.current.width,
-          paddleRef.current.height,
-        );
-        updateBallPosition();
-        requestAnimationFrame(gameLoop);
-      };
-      requestAnimationFrame(gameLoop);
-    }
+    const gameLoop = () => {
+      if (isGameOver) return; // 게임이 끝났으면 중단
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 벽돌 그리기
+      bricksRef.current.forEach((row) =>
+        row.forEach((brick) => {
+          if (brick.status === 1) {
+            ctx.fillStyle = '#FF5733';
+            ctx.fillRect(brick.x, brick.y, brickWidth, brickHeight);
+          }
+        }),
+      );
+
+      // 공 그리기
+      ctx.beginPath();
+      ctx.arc(
+        ballRef.current.x,
+        ballRef.current.y,
+        ballRef.current.radius,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fillStyle = '#0095DD';
+      ctx.fill();
+      ctx.closePath();
+
+      // 패들 그리기
+      ctx.fillStyle = '#0095DD';
+      ctx.fillRect(
+        paddleRef.current.x,
+        paddleRef.current.y,
+        paddleRef.current.width,
+        paddleRef.current.height,
+      );
+
+      updateBallPosition(); // 공 이동
+
+      animationFrameId.current = requestAnimationFrame(gameLoop);
+    };
+
+    animationFrameId.current = requestAnimationFrame(gameLoop);
+
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current); // 게임 루프 정지
+      }
+    };
   }, [ctx, isGameOver]);
 
   useEffect(() => {
