@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import BrickGameBoard from '@/_components/brickgame/BrickGameBoard';
 import BrickGameCover from '@/_components/brickgame/BrickGameCover';
@@ -13,20 +13,25 @@ export default function BrickGame() {
   const [gameFinish, setGameFinish] = useState(false);
   const [gameStart, setGameStart] = useState(true);
 
+  useEffect(() => {
+    console.log(score);
+  }, [score]);
+
   const handleGameFinish = () => {
     if (gameFinish) return;
 
-    const finalScore = score;
-    const bestScore = Number(window.localStorage.getItem('Brick Game'));
+    setScore((prevScore) => {
+      const betScore = Number(window.localStorage.getItem('Brick Game')) || 0;
+      const newScore = prevScore;
 
-    console.log(finalScore, bestScore);
+      if (newScore > betScore) {
+        window.localStorage.setItem('Brick Game', String(newScore));
+      }
+      return newScore;
+    });
 
-    if (finalScore > bestScore) {
-      window.localStorage.setItem('Brick Game', String(finalScore));
-    }
     setGameFinish(true);
   };
-
   const handleGameReset = () => {
     setGameFinish(false);
     setGameStart(true);
@@ -50,6 +55,7 @@ export default function BrickGame() {
           ) : (
             <BrickGameBoard
               setScore={setScore}
+              score={score}
               handleGameFinish={handleGameFinish}
             />
           )}
