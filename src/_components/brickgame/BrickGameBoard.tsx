@@ -5,11 +5,13 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 interface BrickGameProps {
   setScore: Dispatch<SetStateAction<number>>;
   handleGameFinish: () => void;
+  score: number;
 }
 
 export default function BrickGameBoard({
   setScore,
   handleGameFinish,
+  score,
 }: BrickGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
