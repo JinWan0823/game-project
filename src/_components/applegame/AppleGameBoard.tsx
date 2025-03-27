@@ -2,6 +2,8 @@
 
 import { SetStateAction, useEffect, useRef, useState } from 'react';
 
+import { clearApple } from '@/utill/soundUtils';
+
 interface AppleGameBoardProps {
   setScore: React.Dispatch<SetStateAction<number>>;
 }
@@ -175,6 +177,7 @@ export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
 
         return newApples;
       });
+      clearApple();
     }
 
     setDragStart(null);
@@ -187,7 +190,6 @@ export default function AppleGameBoard({ setScore }: AppleGameBoardProps) {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) drawApples(ctx, apples);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apples, dragStart, dragEnd]);
 
   return (

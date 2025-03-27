@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useState, Dispatch, SetStateAction } from 'react';
 
+import { selectRPS } from '@/utill/soundUtils';
+
 import ComRps from './ComRps';
 import ResultRps from './ResultRps';
 import RpsOpt from './RpsOpt';
@@ -94,6 +96,8 @@ export default function RpsGameBoard({
       }
       return prev - 1;
     });
+
+    selectRPS();
   };
 
   return (
