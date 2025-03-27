@@ -14,13 +14,17 @@ export default function BrickGame() {
   const [gameStart, setGameStart] = useState(true);
 
   const handleGameFinish = () => {
-    setGameFinish(true);
+    if (gameFinish) return;
+
     const finalScore = score;
     const bestScore = Number(window.localStorage.getItem('Brick Game'));
+
+    console.log(finalScore, bestScore);
 
     if (finalScore > bestScore) {
       window.localStorage.setItem('Brick Game', String(finalScore));
     }
+    setGameFinish(true);
   };
 
   const handleGameReset = () => {
